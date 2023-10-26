@@ -1,25 +1,27 @@
 import React from 'react';
 import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
 
-export default function ColorsList({colors}) {
+export default function ColorsList({color, setColor, stock, colors}) {
   return (
     <>
       <View style={styles.rootContainer}>
-        {colors.map(color => {
+        {colors.map(curColor => {
           return (
             <TouchableWithoutFeedback
+              key={curColor}
               onPress={() => {
-                console.log(`${color} pressed!!`);
+                setColor(curColor);
               }}>
               <View
-                key={color}
                 // eslint-disable-next-line react-native/no-inline-styles
                 style={{
                   height: 30,
                   width: 30,
                   marginRight: 10,
                   borderRadius: 50,
-                  backgroundColor: `${color}`,
+                  opacity: stock > 0 ? 1 : 0.5,
+                  backgroundColor: `${curColor}`,
+                  borderWidth: color === curColor ? 2 : 0,
                 }}
               />
             </TouchableWithoutFeedback>

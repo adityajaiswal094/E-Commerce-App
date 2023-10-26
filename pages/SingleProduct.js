@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -7,13 +7,20 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
+  BackHandler,
 } from 'react-native';
 import {useParams} from 'react-router-native';
 import {useProductContext} from '../contexts/productContext';
 import FormatPrice from '../utils/helper';
 import ColorsList from '../components/ColorsList';
-import {Button} from 'react-native-paper';
-import {Link} from 'react-router-native';
+import {ActivityIndicator, Button, FAB} from 'react-native-paper';
+import {useNavigate} from 'react-router-native';
+import CustomBackButton from '../components/CustomBackButton';
+import ReviewStars from '../components/ReviewStars';
+import AddToCart from '../components/AddToCart';
+import CustomIconButton from '../components/CustomIconButton';
+import {useCartContext} from '../contexts/cartContext';
+import QuantityToggle from '../components/QuantityToggle';
 
 const baseUrl = 'http:localhost:8080';
 const {height, width} = Dimensions.get('window');
@@ -22,6 +29,10 @@ export default function SingleProduct() {
   const {id} = useParams();
   const {getSingleProduct, isSingleLoading, singleProduct} =
     useProductContext();
+
+  const {addToCart} = useCartContext();
+
+  const navigate = useNavigate();
 
   const {
     name = '',
@@ -36,13 +47,66 @@ export default function SingleProduct() {
     stars = 0,
   } = singleProduct;
 
+  const [quantity, setQuantity] = useState(1);
+  const [color, setColor] = useState(colors[0]);
+
+  const increaseQuantity = () => {
+    quantity < stock ? setQuantity(quantity + 1) : setQuantity(stock);
+  };
+
+  const decreaseQuantity = () => {
+    quantity > 1 ? setQuantity(quantity - 1) : setQuantity(1);
+  };
+
+  const navigateToCart = () => {
+    navigate(
+      '/cart' /* {
+      state: {
+        quantity: quantity,
+        stock: stock,
+        setQuantity: setQuantity,
+        increaseQuantity: increaseQuantity,
+        decreaseQuantity: decreaseQuantity,
+      },
+    } */,
+    );
+  };
+
+  // fetching single product details
   useEffect(() => {
     const singleProductUrl = `${baseUrl}/singleproduct/${id}`;
     getSingleProduct(singleProductUrl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
+  // over-riding hardware back action
+  useEffect(() => {
+    const backAction = e => {
+      // if (e && e.preventDefault) {
+      // e.preventDefault();
+      // }
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove;
+  }, []);
+
+  // selecting first color as soon as colors[] gets populated
+  useEffect(() => {
+    let initialColor = colors[0];
+    setColor(initialColor);
+  }, [colors]);
+
+  return isSingleLoading ? (
+    <View style={styles.activityIndicatorStyle}>
+      <ActivityIndicator size="large" />
+    </View>
+  ) : (
     <View style={styles.rootContainer}>
       <ScrollView>
         {/* image */}
@@ -64,23 +128,46 @@ export default function SingleProduct() {
           </Text>
 
           {/* colors */}
-          {/* TODO */}
-          <ColorsList colors={colors} />
+          <ColorsList
+            color={color}
+            setColor={setColor}
+            stock={stock}
+            colors={colors}
+          />
+
+          {/* stars and reviews */}
+          <ReviewStars stars={stars} reviews={reviews} size={24} />
 
           {/* description */}
           <Text style={styles.descriptionStyle}>{description}</Text>
         </View>
       </ScrollView>
 
+      <CustomBackButton navigate={navigate} />
+
       {/* Buy button */}
       <View style={styles.bottomBar}>
-        {/* add to cart - add to cart button will just add to cart */}
-        <Button mode="text">Add to cart</Button>
+        {/* decrease, quantity, increase */}
+        {stock > 0 ? (
+          <QuantityToggle
+            quantity={quantity}
+            increaseQuantity={increaseQuantity}
+            decreaseQuantity={decreaseQuantity}
+          />
+        ) : (
+          <Text style={styles.outOfStock}>Out of stock</Text>
+        )}
 
-        {/* buy - buy button will add to cart and redirect to cart page */}
-        <Link to="/cart">
-          <Button mode="contained-tonal">Buy</Button>
-        </Link>
+        {/* add to cart button */}
+        <Button
+          mode="contained-tonal"
+          disabled={stock > 0 ? false : true}
+          onPress={() => {
+            addToCart(id, color, quantity, singleProduct);
+            navigateToCart();
+          }}>
+          Add to cart
+        </Button>
       </View>
     </View>
   );
@@ -98,11 +185,11 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'lime',
+    backgroundColor: 'white',
   },
   imageStyle: {
-    height: 200,
-    width: 200,
+    height: '65%',
+    width: '65%',
   },
   textContainer: {
     flex: 1,
@@ -124,7 +211,7 @@ const styles = StyleSheet.create({
   },
   priceStyle: {
     paddingBottom: 8,
-    color: 'black',
+    color: 'purple',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -139,9 +226,21 @@ const styles = StyleSheet.create({
     height: height * 0.08,
     width: width * 1,
     backgroundColor: 'white',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: width * 0.05,
     flexDirection: 'row',
+    marginBottom: height * 0.01,
+  },
+  activityIndicatorStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  outOfStock: {
+    color: 'red',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });

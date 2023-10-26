@@ -1,10 +1,25 @@
 import React from 'react';
 import {StyleSheet, View, Text, Dimensions} from 'react-native';
 import CustomIconButton from './CustomIconButton';
+import {useNavigate} from 'react-router-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {height, width} = Dimensions.get('window');
 
 export default function AppBar() {
+  const navigate = useNavigate();
+
+  const removeValue = async () => {
+    try {
+      await AsyncStorage.removeItem('cartData').then(() => {
+        console.log('Done.');
+      });
+    } catch (e) {
+      // remove error
+      console.error('Error:', e);
+    }
+  };
+
   return (
     <View style={styles.appbar}>
       {/* heading */}
@@ -13,9 +28,21 @@ export default function AppBar() {
 
         {/* action buttons */}
         <View style={styles.actions}>
-          <CustomIconButton name="search" size={22} />
+          <CustomIconButton
+            name="search"
+            size={22}
+            color={'white'}
+            onPress={() => {
+              removeValue();
+            }}
+          />
           <View style={styles.horizontalSpacing} />
-          <CustomIconButton name="shopping-cart" size={22} />
+          <CustomIconButton
+            name="shopping-cart"
+            size={22}
+            color={'white'}
+            onPress={() => navigate('/cart')}
+          />
         </View>
       </View>
     </View>

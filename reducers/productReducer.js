@@ -4,7 +4,7 @@ const ProductReducer = (state, action) => {
       return {...state, isLoading: true};
 
     case 'GET_PRODUCTS_DATA':
-      return {...state, products: action.payload};
+      return {...state, products: action.payload, isLoading: false};
 
     case 'GET_PRODUCTS_DATA_ERROR':
       return {...state, isLoading: false, isError: true};
