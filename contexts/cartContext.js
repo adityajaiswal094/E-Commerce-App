@@ -1,8 +1,4 @@
-import React, {
-  /* useEffect, */ createContext,
-  useContext,
-  useReducer,
-} from 'react';
+import React, {useEffect, createContext, useContext, useReducer} from 'react';
 import reducer from '../reducers/cartReducer';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -12,7 +8,7 @@ const initialState = {
   cart: [],
   //   cart: getLocalCartData(),
   totalItem: 0,
-  totalPrice: 0,
+  totalAmount: 0,
 };
 
 const CartProvider = ({children}) => {
@@ -48,20 +44,15 @@ const CartProvider = ({children}) => {
   //     }
   //   };
 
-  //   const getLocalCartData = async () => {
-  //     await AsyncStorage.getItem('cartData').then(fetchedLocalCartData => {
-  //       if (fetchedLocalCartData === null) {
-  //         state.cart = [];
-  //         return;
-  //       } else {
-  //         const cartData = JSON.parse(fetchedLocalCartData);
-  //         // console.log('cartData in getFunction:', cartData);
-  //         // console.log('state.cart:', state.cart);
-  //         state.cart = cartData;
-  //         return;
-  //       }
-  //     });
-  //   };
+  // const getLocalCartData = async () => {
+  //   await AsyncStorage.getItem('cartData').then(fetchedLocalCartData => {
+  //     const cartData = JSON.parse(fetchedLocalCartData);
+  //     if (!Array.isArray(cartData)) {
+  //       return [];
+  //     }
+  //     return cartData;
+  //   });
+  // };
 
   // get item from local storage
   //   useEffect(() => {
@@ -73,6 +64,10 @@ const CartProvider = ({children}) => {
   //   useEffect(() => {
   //     storeData(state.cart);
   //   }, [state.cart]);
+
+  useEffect(() => {
+    dispatch({type: 'TOTAL_CART_ITEM_VALUE'});
+  }, [state.cart]);
 
   return (
     <CartContext.Provider

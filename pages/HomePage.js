@@ -1,14 +1,18 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import ProductListView from '../components/ProductListView';
-
-// eslint-disable-next-line no-unused-vars
-const {height, width} = Dimensions.get('window');
+import {useNetInfo} from '@react-native-community/netinfo';
+import NoInternetConnection from '../components/NoInternetConnection';
 
 export default function HomePage() {
+  const netinfo = useNetInfo();
+  console.log('netinfo: ', netinfo);
+
+  const isConnected = netinfo.isConnected;
+
   return (
     <View style={styles.rootContainer}>
-      <ProductListView />
+      {isConnected === true ? <ProductListView /> : <NoInternetConnection />}
     </View>
   );
 }

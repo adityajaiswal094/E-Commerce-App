@@ -31,10 +31,10 @@ const CartReducer = (state, action) => {
           reviews: product.reviews,
           quantity: quantity,
           price: product.price,
-          subTotal: product.price * quantity,
           maxStock: product.stock,
         };
 
+        console.log('cartProduct.subTotal: ', cartProduct.subTotal);
         return {...state, cart: [...state.cart, cartProduct]};
       }
 
@@ -42,7 +42,6 @@ const CartReducer = (state, action) => {
       let itemId = action.payload;
 
       let updatedCart = state.cart.filter(item => item.id !== itemId);
-
       return {
         ...state,
         cart: updatedCart,
@@ -60,7 +59,6 @@ const CartReducer = (state, action) => {
           return item;
         }
       });
-
       return {...state, cart: updatedCartList};
 
     case 'DECREASE_QUANTITY':
@@ -75,8 +73,27 @@ const CartReducer = (state, action) => {
           return item;
         }
       });
-
       return {...state, cart: updatedCartList};
+
+    case 'TOTAL_CART_ITEM_VALUE':
+      let totalItemCountAndValue = state.cart.reduce(
+        (initialValue, curItem) => {
+          let itemQuantity = curItem.quantity;
+          let curItemPrice = curItem.price;
+          let curItemQuantity = curItem.quantity;
+
+          initialValue.totalItem += itemQuantity;
+          initialValue.totalAmount += curItemPrice * curItemQuantity;
+
+          return initialValue;
+        },
+        {totalItem: 0, totalAmount: 0},
+      );
+      return {
+        ...state,
+        totalItem: totalItemCountAndValue.totalItem,
+        totalAmount: totalItemCountAndValue.totalAmount,
+      };
 
     default:
       return state;

@@ -2,24 +2,27 @@ import React from 'react';
 import {StyleSheet, View, Text, Dimensions} from 'react-native';
 import CustomIconButton from './CustomIconButton';
 import {useNavigate, useLocation} from 'react-router-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Badge} from 'react-native-paper';
+import {useCartContext} from '../contexts/cartContext';
 
 const {height, width} = Dimensions.get('window');
 
 export default function AppBar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const {totalItem} = useCartContext();
 
-  const removeValue = async () => {
-    try {
-      await AsyncStorage.removeItem('cartData').then(() => {
-        console.log('Done.');
-      });
-    } catch (e) {
-      // remove error
-      console.error('Error:', e);
-    }
-  };
+  // const removeValue = async () => {
+  //   try {
+  //     await AsyncStorage.removeItem('cartData').then(() => {
+  //       console.log('Done.');
+  //     });
+  //   } catch (e) {
+  //     // remove error
+  //     console.error('Error:', e);
+  //   }
+  // };
 
   return (
     <View style={styles.appbar}>
@@ -31,21 +34,27 @@ export default function AppBar() {
         <View style={styles.actions}>
           <CustomIconButton
             name="search"
-            size={height < 762 ? height * 0.03 : height * 0.04}
+            size={height < 762 ? height * 0.035 : height * 0.04}
             color={'white'}
-            onPress={() => {
-              removeValue();
-            }}
+            onPress={() => {}}
           />
           <View style={styles.horizontalSpacing} />
+          {/* <View style={styles.cartContainer}> */}
           <CustomIconButton
             name="shopping-cart"
-            size={height < 762 ? height * 0.03 : height * 0.04}
+            size={height < 762 ? height * 0.035 : height * 0.04}
             color={'white'}
             onPress={() =>
               location.pathname === '/cart' ? null : navigate('/cart')
             }
           />
+          <Badge
+            visible={totalItem === 0 ? false : true}
+            size={16}
+            style={styles.badgeStyle}>
+            {totalItem}
+          </Badge>
+          {/* </View> */}
         </View>
       </View>
     </View>
@@ -77,8 +86,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: width * 0.03,
   },
   horizontalSpacing: {
-    width: width * 0.03,
+    width: width * 0.04,
+  },
+  cartContainer: {
+    // flex: 1,
+    height: '100%',
+    width: width * 0.1,
+    backgroundColor: 'orange',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  badgeStyle: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    // color: 'white',
+    backgroundColor: '#5718b6',
   },
 });
