@@ -14,11 +14,9 @@ import {useProductContext} from '../contexts/productContext';
 import FormatPrice from '../utils/helper';
 import ColorsList from '../components/ColorsList';
 import {ActivityIndicator, Button, FAB} from 'react-native-paper';
-import {useNavigate} from 'react-router-native';
+import {useNavigate, useLocation} from 'react-router-native';
 import CustomBackButton from '../components/CustomBackButton';
 import ReviewStars from '../components/ReviewStars';
-import AddToCart from '../components/AddToCart';
-import CustomIconButton from '../components/CustomIconButton';
 import {useCartContext} from '../contexts/cartContext';
 import QuantityToggle from '../components/QuantityToggle';
 
@@ -33,6 +31,7 @@ export default function SingleProduct() {
   const {addToCart} = useCartContext();
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     name = '',
@@ -71,6 +70,9 @@ export default function SingleProduct() {
     } */,
     );
   };
+
+  // console.log('height: ', height);
+  // console.log('width: ', width);
 
   // fetching single product details
   useEffect(() => {
@@ -128,15 +130,24 @@ export default function SingleProduct() {
           </Text>
 
           {/* colors */}
-          <ColorsList
-            color={color}
-            setColor={setColor}
-            stock={stock}
-            colors={colors}
-          />
+          <View style={styles.colorListContainer}>
+            <ColorsList
+              color={color}
+              setColor={setColor}
+              stock={stock}
+              colors={colors}
+            />
+          </View>
 
           {/* stars and reviews */}
-          <ReviewStars stars={stars} reviews={reviews} size={24} />
+          <View style={styles.reviewContainer}>
+            <ReviewStars
+              stars={stars}
+              reviews={reviews}
+              size={height < 762 ? height * 0.02 : height * 0.024}
+              location={location}
+            />
+          </View>
 
           {/* description */}
           <Text style={styles.descriptionStyle}>{description}</Text>
@@ -162,11 +173,12 @@ export default function SingleProduct() {
         <Button
           mode="contained-tonal"
           disabled={stock > 0 ? false : true}
+          labelStyle={styles.buttonLabelStyle}
           onPress={() => {
             addToCart(id, color, quantity, singleProduct);
             navigateToCart();
           }}>
-          Add to cart
+          <Text style={styles.buttonTextStyle}>Add to cart</Text>
         </Button>
       </View>
     </View>
@@ -181,56 +193,68 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageContainer: {
-    height: 320,
+    height: height * 0.4,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
   },
   imageStyle: {
-    height: '65%',
+    height: '70%',
     width: '65%',
   },
   textContainer: {
     flex: 1,
-    paddingHorizontal: 10,
+    marginTop: 10,
+    paddingHorizontal: width * 0.02,
   },
   titleStyle: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingBottom: 8,
+    marginBottom: height < 762 ? height * 0.01 : 0,
   },
   modelNameStyle: {
     color: 'black',
-    fontSize: 24,
+    fontSize: height < 762 ? height * 0.03 : height * 0.04,
   },
   brandNameStyle: {
     color: 'black',
-    paddingRight: 5,
-    fontSize: 20,
-  },
-  priceStyle: {
-    paddingBottom: 8,
-    color: 'purple',
-    fontSize: 18,
+    paddingRight: width * 0.01,
+    fontSize: height < 762 ? height * 0.03 : height * 0.03,
     fontWeight: 'bold',
   },
+  priceStyle: {
+    flex: 1,
+    marginBottom: height * 0.01,
+    color: 'purple',
+    fontSize: height < 762 ? height * 0.025 : height * 0.03,
+    fontWeight: 'bold',
+  },
+  colorListContainer: {
+    flex: 1,
+    marginBottom: height < 762 ? height * 0.01 : height * 0.03,
+  },
+  reviewContainer: {
+    flex: 1,
+    marginBottom: height * 0.01,
+  },
   descriptionStyle: {
-    paddingBottom: 8,
+    flex: 1,
+    marginBottom: height * 0.01,
     color: 'black',
-    fontSize: 18,
+    fontSize: height < 762 ? height * 0.02 : height * 0.025,
     textAlign: 'justify',
   },
   bottomBar: {
     // flex: 1,
     height: height * 0.08,
-    width: width * 1,
+    width: width,
     backgroundColor: 'white',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: width * 0.05,
+    paddingHorizontal: width * 0.08,
     flexDirection: 'row',
-    marginBottom: height * 0.01,
   },
   activityIndicatorStyle: {
     flex: 1,
@@ -240,7 +264,17 @@ const styles = StyleSheet.create({
   },
   outOfStock: {
     color: 'red',
-    fontSize: 18,
+    fontSize: height < 762 ? height * 0.025 : height * 0.04,
     fontWeight: 'bold',
+  },
+  buttonStyle: {},
+  buttonLabelStyle: {
+    // fontSize: height < 762 ? height * 0.01 : height * 0.018,
+    paddingTop: height < 762 ? 4 : 18,
+    paddingBottom: height < 762 ? 1 : 6,
+    paddingHorizontal: height < 762 ? 0 : 8,
+  },
+  buttonTextStyle: {
+    fontSize: height < 762 ? 16 : 24,
   },
 });

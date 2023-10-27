@@ -1,13 +1,14 @@
 import React from 'react';
 import {StyleSheet, View, Text, Dimensions} from 'react-native';
 import CustomIconButton from './CustomIconButton';
-import {useNavigate} from 'react-router-native';
+import {useNavigate, useLocation} from 'react-router-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {height, width} = Dimensions.get('window');
 
 export default function AppBar() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const removeValue = async () => {
     try {
@@ -30,7 +31,7 @@ export default function AppBar() {
         <View style={styles.actions}>
           <CustomIconButton
             name="search"
-            size={22}
+            size={height < 762 ? height * 0.03 : height * 0.04}
             color={'white'}
             onPress={() => {
               removeValue();
@@ -39,9 +40,11 @@ export default function AppBar() {
           <View style={styles.horizontalSpacing} />
           <CustomIconButton
             name="shopping-cart"
-            size={22}
+            size={height < 762 ? height * 0.03 : height * 0.04}
             color={'white'}
-            onPress={() => navigate('/cart')}
+            onPress={() =>
+              location.pathname === '/cart' ? null : navigate('/cart')
+            }
           />
         </View>
       </View>
@@ -57,7 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1ecbe1',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: width * 0.05,
+    paddingHorizontal: width * 0.04,
   },
   approw: {
     flex: 1,
@@ -68,7 +71,7 @@ const styles = StyleSheet.create({
   heading: {
     flex: 1,
     color: 'white',
-    fontSize: 24,
+    fontSize: height < 762 ? height * 0.03 : height * 0.04,
   },
   actions: {
     flex: 1,
@@ -76,6 +79,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   horizontalSpacing: {
-    width: 10,
+    width: width * 0.03,
   },
 });

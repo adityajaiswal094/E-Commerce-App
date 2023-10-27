@@ -1,5 +1,12 @@
 import React from 'react';
-import {StyleSheet, View, TouchableWithoutFeedback} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  TouchableWithoutFeedback,
+} from 'react-native';
+
+const {height, width} = Dimensions.get('window');
 
 export default function ColorsList({color, setColor, stock, colors}) {
   return (
@@ -15,9 +22,9 @@ export default function ColorsList({color, setColor, stock, colors}) {
               <View
                 // eslint-disable-next-line react-native/no-inline-styles
                 style={{
-                  height: 30,
-                  width: 30,
-                  marginRight: 10,
+                  height: height * 0.04,
+                  width: height * 0.04,
+                  marginRight: width * 0.02,
                   borderRadius: 50,
                   opacity: stock > 0 ? 1 : 0.5,
                   backgroundColor: `${curColor}`,
@@ -39,8 +46,8 @@ const styles = StyleSheet.create({
     // justifyContent: 'flex-start',
     height: 30,
     flexDirection: 'row',
-    marginTop: 10,
-    marginBottom: 14,
+    // marginTop: 10,
+    // marginBottom: 14,
     // backgroundColor: 'blue',
   },
 });

@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, FlatList, Dimensions} from 'react-native';
 import CustomBackButton from '../components/CustomBackButton';
 import {useNavigate} from 'react-router-native';
 import {useCartContext} from '../contexts/cartContext';
-import CartCard from '../components/CartCard';
+import CartCard from '../components/CartItemCard';
 import {Button} from 'react-native-paper';
 
 const {height, width} = Dimensions.get('window');
@@ -39,8 +39,11 @@ export default function Cart() {
             <Text style={styles.textStyle}>Total</Text>
 
             {/* add to cart button */}
-            <Button mode="contained-tonal" onPress={() => {}}>
-              Checkout
+            <Button
+              mode="contained-tonal"
+              labelStyle={styles.buttonLabelStyle}
+              onPress={() => {}}>
+              <Text style={styles.buttonTextStyle}>Checkout</Text>
             </Button>
           </View>
         </>
@@ -65,8 +68,9 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
   },
   textStyle: {
-    color: 'black',
-    fontSize: 22,
+    color: 'purple',
+    fontSize: height < 762 ? height * 0.025 : height * 0.03,
+    fontWeight: 'bold',
   },
   bottomBar: {
     // flex: 1,
@@ -75,8 +79,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: width * 0.05,
+    paddingHorizontal: width * 0.08,
     flexDirection: 'row',
-    marginBottom: height * 0.01,
+  },
+  buttonLabelStyle: {
+    // fontSize: height < 762 ? height * 0.01 : height * 0.018,
+    paddingTop: height < 762 ? 4 : 18,
+    paddingBottom: height < 762 ? 1 : 6,
+    paddingHorizontal: height < 762 ? 0 : 8,
+  },
+  buttonTextStyle: {
+    fontSize: height < 762 ? 16 : 28,
   },
 });

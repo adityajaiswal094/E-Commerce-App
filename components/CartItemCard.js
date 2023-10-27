@@ -7,11 +7,14 @@ import FormatPrice from '../utils/helper';
 import QuantityToggle from './QuantityToggle';
 import ReviewStars from './ReviewStars';
 import {useCartContext} from '../contexts/cartContext';
+import {useLocation} from 'react-router-native';
 
 const {height, width} = Dimensions.get('window');
 
-export default function CartCard({cartItem}) {
+export default function CartItemCard({cartItem}) {
   const {removeItem, increaseQuantity, decreaseQuantity} = useCartContext();
+
+  const location = useLocation();
 
   const {
     id,
@@ -44,7 +47,12 @@ export default function CartCard({cartItem}) {
           </Text>
 
           {/* stars and review */}
-          <ReviewStars stars={stars} reviews={reviews} size={14} />
+          <ReviewStars
+            stars={stars}
+            reviews={reviews}
+            size={height < 762 ? height * 0.015 : height * 0.015}
+            location={location}
+          />
 
           {/* price */}
           <Text style={styles.priceStyle}>
@@ -56,8 +64,8 @@ export default function CartCard({cartItem}) {
             <Text style={styles.colorTextStyle}>Color: </Text>
             <View
               style={{
-                height: 18,
-                width: 18,
+                height: height < 762 ? height * 0.02 : height * 0.02,
+                width: height < 762 ? height * 0.02 : height * 0.02,
                 borderRadius: 50,
                 backgroundColor: `${color}`,
               }}
@@ -84,10 +92,11 @@ export default function CartCard({cartItem}) {
         <Button
           icon="delete"
           mode="text"
+          labelStyle={styles.buttonLabelStyle}
           onPress={() => {
             removeItem(id);
           }}>
-          Remove
+          <Text style={styles.buttonTextStyle}>Remove</Text>
         </Button>
       </View>
     </View>
@@ -101,14 +110,14 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     elevation: 5,
     backgroundColor: 'white',
-    height: 200,
+    height: height < 762 ? 200 : height * 0.24,
     width: '100%',
   },
   innerContainer1: {
     flex: 3,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
   },
 
   //   image
@@ -116,7 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // height: '100%',
     // width: width * 0.36,
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -134,12 +143,12 @@ const styles = StyleSheet.create({
 
   nameStyle: {
     color: 'black',
-    fontSize: 20,
+    fontSize: height < 762 ? height * 0.024 : height * 0.025,
     marginVertical: 10,
   },
   priceStyle: {
     color: 'purple',
-    fontSize: 16,
+    fontSize: height < 762 ? height * 0.02 : height * 0.022,
     fontWeight: 'bold',
     marginTop: 8,
   },
@@ -151,18 +160,25 @@ const styles = StyleSheet.create({
     // backgroundColor: 'orange',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: height < 762 ? height * 0.018 : height * 0.015,
   },
   colorTextStyle: {
     color: 'black',
-    fontSize: 14,
+    fontSize: height < 762 ? height * 0.02 : height * 0.02,
   },
 
   //   remove button
   innerContainer2: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: height < 762 ? 'space-around' : 'space-around',
     alignItems: 'center',
+  },
+  buttonLabelStyle: {
+    fontSize: height < 762 ? 18 : 24,
+    paddingTop: height < 762 ? 4 : 10,
+  },
+  buttonTextStyle: {
+    fontSize: height < 762 ? 16 : 24,
   },
 });

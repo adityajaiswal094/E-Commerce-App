@@ -3,7 +3,7 @@ import {FlatList, View, StyleSheet} from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
 
 import {useProductContext} from '../contexts/productContext';
-import ProductCard from './ProductCard';
+import ProductCard from './ProductItemCard';
 
 export default function ProductListView() {
   const {products, isLoading} = useProductContext();

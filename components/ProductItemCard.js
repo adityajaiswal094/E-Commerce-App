@@ -7,16 +7,19 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {useNavigate} from 'react-router-native';
+import {useNavigate, useLocation} from 'react-router-native';
 
 import FormatPrice from '../utils/helper';
+import ReviewStars from './ReviewStars';
 
 const {height, width} = Dimensions.get('window');
 
-export default function ProductCard({product}) {
-  const {id, name, imageUrl, price, description, company} = product;
+export default function ProductItemCard({product}) {
+  const {id, name, imageUrl, price, description, company, reviews, stars} =
+    product;
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <TouchableWithoutFeedback
@@ -37,6 +40,14 @@ export default function ProductCard({product}) {
           <Text style={styles.nameStyle}>
             {company} {name}
           </Text>
+
+          {/* review and star */}
+          <ReviewStars
+            reviews={reviews}
+            stars={stars}
+            size={height < 762 ? height * 0.015 : height * 0.015}
+            location={location}
+          />
 
           {/* spacing */}
           <View style={styles.verticalSpacing} />
@@ -104,7 +115,7 @@ const styles = StyleSheet.create({
     fontSize: height * 0.02,
   },
   verticalSpacing: {
-    height: 25,
+    height: 18,
   },
   descriptionStyle: {
     color: 'black',
