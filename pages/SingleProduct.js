@@ -20,7 +20,7 @@ import ReviewStars from '../components/ReviewStars';
 import {useCartContext} from '../contexts/cartContext';
 import QuantityToggle from '../components/QuantityToggle';
 
-const baseUrl = 'http:localhost:8080';
+const baseUrl = 'https://e-commercebackend.up.railway.app';
 const {height, width} = Dimensions.get('window');
 
 export default function SingleProduct() {
@@ -113,7 +113,11 @@ export default function SingleProduct() {
       <ScrollView>
         {/* image */}
         <View style={styles.imageContainer}>
-          <Image style={styles.imageStyle} source={{uri: imageUrl}} />
+          {imageUrl === '' ? (
+            <ActivityIndicator size="large" />
+          ) : (
+            <Image style={styles.imageStyle} source={{uri: imageUrl}} />
+          )}
         </View>
 
         {/* details */}

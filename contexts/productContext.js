@@ -4,7 +4,7 @@ import reducer from '../reducers/productReducer';
 
 const ProductContext = createContext();
 
-const baseUrl = 'http://localhost:8080/';
+const baseUrl = 'https://e-commercebackend.up.railway.app/';
 
 const initialState = {
   isLoading: false,
