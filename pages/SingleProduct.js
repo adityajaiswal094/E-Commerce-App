@@ -84,7 +84,7 @@ export default function SingleProduct() {
     );
   };
 
-  const singleProductUrl = `${BASE_URL}/singleproduct/${id}`;
+  const singleProductUrl = `${BASE_URL}singleproduct/${id}`;
 
   const getSingleProduct = useCallback(async url => {
     // dispatch({type: 'SINGLE_LOADING'});

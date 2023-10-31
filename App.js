@@ -12,6 +12,7 @@ import Cart from './pages/Cart';
 import Test from './pages/Test';
 import PageNotFound from './pages/PageNotFound';
 import Auth from './pages/Auth';
+import OnboardingScreen from './pages/OnboardingScreen';
 
 // import {ProductProvider} from './contexts/productContext';
 // import {CartProvider} from './contexts/cartContext';
@@ -36,6 +37,8 @@ function App() {
         <Route path="/test" element={<Test />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+
+      {/* <OnboardingScreen /> */}
     </>
   );
 }
