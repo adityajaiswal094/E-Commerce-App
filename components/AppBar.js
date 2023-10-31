@@ -1,12 +1,19 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, View, /* Text, */ Image, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  /* Text, */ Image,
+  Dimensions,
+  Pressable,
+} from 'react-native';
 import CustomIconButton from './CustomIconButton';
 import {useNavigate, useLocation} from 'react-router-native';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Badge} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {totalCartItemValue} from '../store/redux/cartReducers';
-
+import Icon from 'react-native-vector-icons/AntDesign';
+import {signOutReducer} from '../store/redux/signInReducers';
 // import {useCartContext} from '../contexts/cartContext';
 
 const {height, width} = Dimensions.get('window');
@@ -70,6 +77,19 @@ export default function AppBar() {
             {totalItem}
           </Badge>
           {/* </View> */}
+
+          {/*  */}
+          <View style={styles.horizontalSpacing} />
+          <Pressable
+            onPress={() => {
+              dispatch(signOutReducer());
+            }}>
+            <Icon
+              name="logout"
+              size={height < 762 ? height * 0.035 : height * 0.04}
+              color={'white'}
+            />
+          </Pressable>
         </View>
       </View>
     </View>
@@ -84,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1ecbe1',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingRight: width * 0.04,
+    paddingRight: width * 0.02,
     paddingLeft: width * 0.06,
   },
   approw: {

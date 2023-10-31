@@ -12,6 +12,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import productReducers from './productReducers';
 import cartReducers from './cartReducers';
+import signInReducers from './signInReducers';
 
 const persistConfig = {
   key: 'root',
@@ -21,6 +22,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   productDetails: productReducers,
   cartDetails: cartReducers,
+  signInDetails: signInReducers,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

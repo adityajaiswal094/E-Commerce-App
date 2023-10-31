@@ -7,6 +7,7 @@ import {Button} from 'react-native-paper';
 import FormatPrice from '../utils/helper';
 import EmptyCartAnimation from '../components/EmptyCartAnimation';
 import {useSelector} from 'react-redux';
+import AppBar from '../components/AppBar';
 
 // import {useCartContext} from '../contexts/cartContext';
 
@@ -17,45 +18,52 @@ export default function Cart() {
   // const {cart, totalAmount} = useCartContext();
   const {cart, totalAmount} = useSelector(state => state.cartDetails);
 
-  return cart.length === 0 ? (
-    <View style={styles.emptyCartTextStyle}>
-      <EmptyCartAnimation />
-      <Text style={styles.textStyle}>Your cart is empty!</Text>
-      <Button
-        mode="contained-tonal"
-        onPress={() => {
-          navigate('/', {replace: true});
-        }}>
-        Shop Now
-      </Button>
-    </View>
-  ) : (
+  return (
     <>
-      {/* cart list */}
-      <View style={styles.rootContainer}>
-        <CustomBackButton navigate={navigate} />
-        <FlatList
-          style={styles.cartContainer}
-          data={cart}
-          renderItem={({item}) => <CartCard key={item.id} cartItem={item} />}
-        />
-
-        {/* bottom bar - shows total amount and checkout button */}
-        <View style={styles.bottomBar}>
-          {/* decrease, quantity, increase */}
-          <Text style={styles.textStyle}>
-            <FormatPrice price={totalAmount} />
-          </Text>
-
-          {/* add to cart button */}
+      <AppBar />
+      {cart.length === 0 ? (
+        <View style={styles.emptyCartTextStyle}>
+          <EmptyCartAnimation />
+          <Text style={styles.textStyle}>Your cart is empty!</Text>
           <Button
             mode="contained-tonal"
-            labelStyle={styles.buttonLabelStyle}
-            onPress={() => {}}>
-            <Text style={styles.buttonTextStyle}>Checkout</Text>
+            onPress={() => {
+              navigate('/', {replace: true});
+            }}>
+            Shop Now
           </Button>
         </View>
-      </View>
+      ) : (
+        <>
+          {/* cart list */}
+          <View style={styles.rootContainer}>
+            <CustomBackButton navigate={navigate} />
+            <FlatList
+              style={styles.cartContainer}
+              data={cart}
+              renderItem={({item}) => (
+                <CartCard key={item.id} cartItem={item} />
+              )}
+            />
+
+            {/* bottom bar - shows total amount and checkout button */}
+            <View style={styles.bottomBar}>
+              {/* decrease, quantity, increase */}
+              <Text style={styles.textStyle}>
+                <FormatPrice price={totalAmount} />
+              </Text>
+
+              {/* add to cart button */}
+              <Button
+                mode="contained-tonal"
+                labelStyle={styles.buttonLabelStyle}
+                onPress={() => {}}>
+                <Text style={styles.buttonTextStyle}>Checkout</Text>
+              </Button>
+            </View>
+          </View>
+        </>
+      )}
     </>
   );
 }

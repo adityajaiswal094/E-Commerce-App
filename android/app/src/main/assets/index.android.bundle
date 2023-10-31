@@ -703,6 +703,6 @@ __d((function(g,r,i,a,m,e,d){Object.defineProperty(e,"__esModule",{value:!0}),e.
 __d((function(g,r,i,a,m,e,d){Object.defineProperty(e,"__esModule",{value:!0}),e.default=function(){return(0,r(d[3]).jsx)(t.View,{style:o.rootContainer,children:(0,r(d[3]).jsx)(t.Text,{style:o.textStyle,children:"Test Page"})})};r(d[0])(r(d[1]));var t=r(d[2]);var o=t.StyleSheet.create({rootContainer:{flex:1,backgroundColor:'white'},textStyle:{color:'black'}})}),697,[1,2,4,191]);
 __d((function(g,r,i,a,m,e,d){Object.defineProperty(e,"__esModule",{value:!0}),e.default=function(){return(0,r(d[3]).jsx)(t.View,{style:o.rootContainer,children:(0,r(d[3]).jsx)(t.Text,{style:o.textStyle,children:"PageNotFound Page"})})};r(d[0])(r(d[1]));var t=r(d[2]);var o=t.StyleSheet.create({rootContainer:{flex:1,backgroundColor:'white'},textStyle:{color:'black'}})}),698,[1,2,4,191]);
 __d((function(g,r,i,a,m,e,d){Object.defineProperty(e,"__esModule",{value:!0}),e.default=function(){return(0,r(d[3]).jsx)(t.View,{style:o.rootContainer,children:(0,r(d[3]).jsx)(t.Text,{style:o.textStyle,children:"Auth Page"})})};r(d[0])(r(d[1]));var t=r(d[2]);var o=t.StyleSheet.create({rootContainer:{flex:1,backgroundColor:'white'},textStyle:{color:'black'}})}),699,[1,2,4,191]);
-__d((function(e,m,p,_,a,c,o){a.exports={name:"e_commerce_app",displayName:"e_commerce_app"}}),700,[]);
+__d((function(e,m,p,_,a,c,o){a.exports={name:"shoppe",displayName:"shoppe"}}),700,[]);
 __r(50);
 __r(0);

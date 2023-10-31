@@ -1,5 +1,5 @@
 {
-  "name": "e_commerce_app",
+  "name": "shoppe",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -12,8 +12,10 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.19.3",
     "@react-native-community/netinfo": "^9.4.1",
+    "@react-native-google-signin/google-signin": "^10.1.0",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.5.1",
+    "firebase": "^10.5.2",
     "lottie-react-native": "^6.3.1",
     "react": "18.2.0",
     "react-native": "0.72.6",

@@ -9,6 +9,7 @@ import {
 } from '../store/redux/productReducers';
 import axios from 'axios';
 import {BASE_URL} from '@env';
+import AppBar from '../components/AppBar';
 
 // import {useNetInfo} from '@react-native-community/netinfo';
 // import NoInternetConnection from '../components/NoInternetConnection';
@@ -64,6 +65,8 @@ export default function HomePage() {
 
   return (
     <View style={styles.rootContainer}>
+      <AppBar />
+
       <ProductListView />
     </View>
   );

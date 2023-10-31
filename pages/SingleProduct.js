@@ -27,6 +27,7 @@ import {
 } from '../store/redux/productReducers';
 import axios from 'axios';
 import {BASE_URL} from '@env';
+import AppBar from '../components/AppBar';
 
 // import {useCartContext} from '../contexts/cartContext';
 
@@ -132,96 +133,101 @@ export default function SingleProduct() {
     setColor(initialColor);
   }, [colors]);
 
-  return isSingleLoading ? (
-    <View style={styles.activityIndicatorStyle}>
-      <ActivityIndicator size="large" />
-    </View>
-  ) : (
-    <View style={styles.rootContainer}>
-      <ScrollView>
-        {/* image */}
-        <View style={styles.imageContainer}>
-          {imageUrl === '' ? (
-            <ActivityIndicator size="large" />
-          ) : (
-            <Image style={styles.imageStyle} source={{uri: imageUrl}} />
-          )}
+  return (
+    <>
+      <AppBar />
+      {isSingleLoading ? (
+        <View style={styles.activityIndicatorStyle}>
+          <ActivityIndicator size="large" />
         </View>
+      ) : (
+        <View style={styles.rootContainer}>
+          <ScrollView>
+            {/* image */}
+            <View style={styles.imageContainer}>
+              {imageUrl === '' ? (
+                <ActivityIndicator size="large" />
+              ) : (
+                <Image style={styles.imageStyle} source={{uri: imageUrl}} />
+              )}
+            </View>
 
-        {/* details */}
-        <View style={styles.textContainer}>
-          {/* brand and model name */}
-          <View style={styles.titleStyle}>
-            <Text style={styles.brandNameStyle}>{company}</Text>
-            <Text style={styles.modelNameStyle}>{name}</Text>
+            {/* details */}
+            <View style={styles.textContainer}>
+              {/* brand and model name */}
+              <View style={styles.titleStyle}>
+                <Text style={styles.brandNameStyle}>{company}</Text>
+                <Text style={styles.modelNameStyle}>{name}</Text>
+              </View>
+
+              {/* price */}
+              <Text style={styles.priceStyle}>
+                <FormatPrice price={price} />
+              </Text>
+
+              {/* colors */}
+              <View style={styles.colorListContainer}>
+                <ColorsList
+                  color={color}
+                  setColor={setColor}
+                  stock={stock}
+                  colors={colors}
+                />
+              </View>
+
+              {/* stars and reviews */}
+              <View style={styles.reviewContainer}>
+                <ReviewStars
+                  stars={stars}
+                  reviews={reviews}
+                  size={height < 762 ? height * 0.02 : height * 0.024}
+                  location={location}
+                />
+              </View>
+
+              {/* description */}
+              <Text style={styles.descriptionStyle}>{description}</Text>
+            </View>
+          </ScrollView>
+
+          <CustomBackButton navigate={navigate} />
+
+          {/* Buy button */}
+          <View style={styles.bottomBar}>
+            {/* decrease, quantity, increase */}
+            {stock > 0 ? (
+              <QuantityToggle
+                quantity={quantity}
+                increaseQuantity={increaseQuantity}
+                decreaseQuantity={decreaseQuantity}
+              />
+            ) : (
+              <Text style={styles.outOfStock}>Out of stock</Text>
+            )}
+
+            {/* add to cart button */}
+            <Button
+              mode="contained-tonal"
+              disabled={stock > 0 ? false : true}
+              labelStyle={styles.buttonLabelStyle}
+              onPress={() => {
+                // addToCart(id, color, quantity, singleProduct);
+                dispatch(
+                  addItemToCart({
+                    id: id,
+                    color: color,
+                    quantity: quantity,
+                    product: singleProduct,
+                  }),
+                );
+                navigateToCart();
+              }}>
+              <Text style={styles.buttonTextStyle}>Add to cart</Text>
+            </Button>
           </View>
-
-          {/* price */}
-          <Text style={styles.priceStyle}>
-            <FormatPrice price={price} />
-          </Text>
-
-          {/* colors */}
-          <View style={styles.colorListContainer}>
-            <ColorsList
-              color={color}
-              setColor={setColor}
-              stock={stock}
-              colors={colors}
-            />
-          </View>
-
-          {/* stars and reviews */}
-          <View style={styles.reviewContainer}>
-            <ReviewStars
-              stars={stars}
-              reviews={reviews}
-              size={height < 762 ? height * 0.02 : height * 0.024}
-              location={location}
-            />
-          </View>
-
-          {/* description */}
-          <Text style={styles.descriptionStyle}>{description}</Text>
         </View>
-      </ScrollView>
-
-      <CustomBackButton navigate={navigate} />
-
-      {/* Buy button */}
-      <View style={styles.bottomBar}>
-        {/* decrease, quantity, increase */}
-        {stock > 0 ? (
-          <QuantityToggle
-            quantity={quantity}
-            increaseQuantity={increaseQuantity}
-            decreaseQuantity={decreaseQuantity}
-          />
-        ) : (
-          <Text style={styles.outOfStock}>Out of stock</Text>
-        )}
-
-        {/* add to cart button */}
-        <Button
-          mode="contained-tonal"
-          disabled={stock > 0 ? false : true}
-          labelStyle={styles.buttonLabelStyle}
-          onPress={() => {
-            // addToCart(id, color, quantity, singleProduct);
-            dispatch(
-              addItemToCart({
-                id: id,
-                color: color,
-                quantity: quantity,
-                product: singleProduct,
-              }),
-            );
-            navigateToCart();
-          }}>
-          <Text style={styles.buttonTextStyle}>Add to cart</Text>
-        </Button>
-      </View>
-    </View>
+      )}
+    </>
   );
 }
 

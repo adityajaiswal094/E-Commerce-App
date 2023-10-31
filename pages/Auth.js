@@ -1,19 +1,10 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-export default function Auth() {
-  return (
-    <View style={styles.rootContainer}>
-      <Text style={styles.textStyle}>Auth Page</Text>
-    </View>
-  );
-}
+import Login from './Login';
+import HomePage from './HomePage';
+import {useSelector} from 'react-redux';
 
-const styles = StyleSheet.create({
-  rootContainer: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  textStyle: {
-    color: 'black',
-  },
-});
+export default function Auth() {
+  const {userDetails} = useSelector(state => state.signInDetails);
+
+  return Object.keys(userDetails).length === 0 ? <Login /> : <HomePage />;
+}
