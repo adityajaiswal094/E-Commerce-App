@@ -6,15 +6,23 @@ import {Button} from 'react-native-paper';
 import FormatPrice from '../utils/helper';
 import QuantityToggle from './QuantityToggle';
 import ReviewStars from './ReviewStars';
-import {useCartContext} from '../contexts/cartContext';
 import {useLocation} from 'react-router-native';
+import {useDispatch} from 'react-redux';
+import {
+  removeItemFromCart,
+  increaseItemQuantity,
+  decreaseItemQuantity,
+} from '../store/redux/cartReducers';
+
+// import {useCartContext} from '../contexts/cartContext';
 
 const {height, width} = Dimensions.get('window');
 
 export default function CartItemCard({cartItem}) {
-  const {removeItem, increaseQuantity, decreaseQuantity} = useCartContext();
+  // const {removeItem, increaseQuantity, decreaseQuantity} = useCartContext();
 
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const {
     id,
@@ -81,10 +89,12 @@ export default function CartItemCard({cartItem}) {
         <QuantityToggle
           quantity={quantity}
           increaseQuantity={() => {
-            increaseQuantity(id);
+            // increaseQuantity(id);
+            dispatch(increaseItemQuantity(id));
           }}
           decreaseQuantity={() => {
-            decreaseQuantity(id);
+            // decreaseQuantity(id);
+            dispatch(decreaseItemQuantity(id));
           }}
         />
 
@@ -94,7 +104,8 @@ export default function CartItemCard({cartItem}) {
           mode="text"
           labelStyle={styles.buttonLabelStyle}
           onPress={() => {
-            removeItem(id);
+            // removeItem(id);
+            dispatch(removeItemFromCart(id));
           }}>
           <Text style={styles.buttonTextStyle}>Remove</Text>
         </Button>

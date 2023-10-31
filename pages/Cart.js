@@ -2,17 +2,20 @@ import React from 'react';
 import {View, Text, StyleSheet, FlatList, Dimensions} from 'react-native';
 import CustomBackButton from '../components/CustomBackButton';
 import {useNavigate} from 'react-router-native';
-import {useCartContext} from '../contexts/cartContext';
 import CartCard from '../components/CartItemCard';
 import {Button} from 'react-native-paper';
 import FormatPrice from '../utils/helper';
 import EmptyCartAnimation from '../components/EmptyCartAnimation';
+import {useSelector} from 'react-redux';
+
+// import {useCartContext} from '../contexts/cartContext';
 
 const {height, width} = Dimensions.get('window');
 
 export default function Cart() {
   const navigate = useNavigate();
-  const {cart, totalAmount} = useCartContext();
+  // const {cart, totalAmount} = useCartContext();
+  const {cart, totalAmount} = useSelector(state => state.cartDetails);
 
   return cart.length === 0 ? (
     <View style={styles.emptyCartTextStyle}>
@@ -76,7 +79,6 @@ const styles = StyleSheet.create({
   textStyle: {
     color: 'purple',
     fontSize: height < 762 ? height * 0.025 : height * 0.03,
-    marginBottom: height * 0.06,
     fontWeight: 'bold',
   },
   bottomBar: {

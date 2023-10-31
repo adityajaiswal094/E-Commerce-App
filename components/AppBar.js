@@ -1,17 +1,23 @@
-import React from 'react';
-import {StyleSheet, View, Text, Dimensions} from 'react-native';
+import React, {useEffect} from 'react';
+import {StyleSheet, View, /* Text, */ Image, Dimensions} from 'react-native';
 import CustomIconButton from './CustomIconButton';
 import {useNavigate, useLocation} from 'react-router-native';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Badge} from 'react-native-paper';
-import {useCartContext} from '../contexts/cartContext';
+import {useDispatch, useSelector} from 'react-redux';
+import {totalCartItemValue} from '../store/redux/cartReducers';
+
+// import {useCartContext} from '../contexts/cartContext';
 
 const {height, width} = Dimensions.get('window');
 
 export default function AppBar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const {totalItem} = useCartContext();
+
+  // const {totalItem} = useCartContext();
+  const {cart, totalItem} = useSelector(state => state.cartDetails);
+  const dispatch = useDispatch();
 
   // const removeValue = async () => {
   //   try {
@@ -24,11 +30,20 @@ export default function AppBar() {
   //   }
   // };
 
+  useEffect(() => {
+    dispatch(totalCartItemValue());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cart]);
+
   return (
     <View style={styles.appbar}>
       {/* heading */}
       <View style={styles.approw}>
-        <Text style={styles.heading}>My App</Text>
+        <Image
+          style={styles.appLogo}
+          source={require('../assets/images/shoppe_logo_white.png')}
+        />
+        {/* <Text style={styles.heading}>My App</Text> */}
 
         {/* action buttons */}
         <View style={styles.actions}>
@@ -69,13 +84,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#1ecbe1',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: width * 0.04,
+    paddingRight: width * 0.04,
+    paddingLeft: width * 0.06,
   },
   approw: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  appLogo: {
+    height: 50,
+    width: 80,
+    objectFit: 'contain',
   },
   heading: {
     flex: 1,

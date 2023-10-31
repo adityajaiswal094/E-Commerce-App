@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   View,
   Image,
@@ -17,21 +17,34 @@ import {ActivityIndicator, Button, FAB} from 'react-native-paper';
 import {useNavigate, useLocation} from 'react-router-native';
 import CustomBackButton from '../components/CustomBackButton';
 import ReviewStars from '../components/ReviewStars';
-import {useCartContext} from '../contexts/cartContext';
 import QuantityToggle from '../components/QuantityToggle';
+import {addItemToCart} from '../store/redux/cartReducers';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  GetSingleProductData,
+  GetSingleProductDataError,
+  SingleLoading,
+} from '../store/redux/productReducers';
+import axios from 'axios';
+import {BASE_URL} from '@env';
 
-const baseUrl = 'https://e-commercebackend.up.railway.app';
+// import {useCartContext} from '../contexts/cartContext';
+
 const {height, width} = Dimensions.get('window');
 
 export default function SingleProduct() {
   const {id} = useParams();
-  const {getSingleProduct, isSingleLoading, singleProduct} =
-    useProductContext();
+  // const {getSingleProduct, isSingleLoading, singleProduct} =
+  //   useProductContext();
+  const {isSingleLoading, singleProduct} = useSelector(
+    state => state.productDetails,
+  );
 
-  const {addToCart} = useCartContext();
+  // const {addToCart} = useCartContext();
 
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const {
     name = '',
@@ -71,13 +84,28 @@ export default function SingleProduct() {
     );
   };
 
-  // console.log('height: ', height);
-  // console.log('width: ', width);
+  const singleProductUrl = `${BASE_URL}/singleproduct/${id}`;
 
+  const getSingleProduct = useCallback(async url => {
+    // dispatch({type: 'SINGLE_LOADING'});
+    dispatch(SingleLoading());
+    try {
+      const response = await axios.get(singleProductUrl);
+      const singleProductData = await response.data;
+      dispatch(GetSingleProductData(singleProductData));
+
+      // dispatch({type: 'GET_SINGLE_PRODUCT_DATA', payload: singleProduct});
+    } catch (error) {
+      dispatch(GetSingleProductDataError());
+      // dispatch({type: 'GET_SINGLE_PRODUCT_DATA_ERROR'});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   // fetching single product details
   useEffect(() => {
-    const singleProductUrl = `${baseUrl}/singleproduct/${id}`;
-    getSingleProduct(singleProductUrl);
+    // getSingleProduct(singleProductUrl);
+
+    getSingleProduct();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -179,7 +207,15 @@ export default function SingleProduct() {
           disabled={stock > 0 ? false : true}
           labelStyle={styles.buttonLabelStyle}
           onPress={() => {
-            addToCart(id, color, quantity, singleProduct);
+            // addToCart(id, color, quantity, singleProduct);
+            dispatch(
+              addItemToCart({
+                id: id,
+                color: color,
+                quantity: quantity,
+                product: singleProduct,
+              }),
+            );
             navigateToCart();
           }}>
           <Text style={styles.buttonTextStyle}>Add to cart</Text>
