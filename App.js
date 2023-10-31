@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StatusBar /* , useColorScheme */} from 'react-native';
 
 // import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -12,7 +12,6 @@ import Cart from './pages/Cart';
 import Test from './pages/Test';
 import PageNotFound from './pages/PageNotFound';
 import Auth from './pages/Auth';
-import {GetProductsData} from './store/redux/productReducers';
 
 // import {ProductProvider} from './contexts/productContext';
 // import {CartProvider} from './contexts/cartContext';
@@ -23,12 +22,6 @@ function App() {
   // const backgroundStyle = {
   //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   // };
-
-  const baseUrl = 'https://e-commercebackend.up.railway.app/';
-
-  useEffect(() => {
-    GetProductsData(baseUrl);
-  }, []);
 
   return (
     <>
