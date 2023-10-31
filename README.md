@@ -1,4 +1,4 @@
-# E-Commerce Application
+# Shoppe: E-Commerce Application
 
 ## Features
 
