@@ -1,28 +1,32 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Image, Text, Dimensions} from 'react-native';
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {signInReducer} from '../store/redux/signInReducers';
+import {saveTokenDetails, signInReducer} from '../store/redux/signInReducers';
 import {useDispatch} from 'react-redux';
+import {useNavigate} from 'react-router-native';
+
+const {height, width} = Dimensions.get('window');
 
 export default function Login() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const usrInfo = await GoogleSignin.signIn();
-      console.log('usrInfo: ', usrInfo);
-      // setUserInfo(usrInfo);
+      // console.log('usrInfo: ', usrInfo);
 
       // storing userInfo in reducer
       dispatch(signInReducer({userDetails: usrInfo}));
 
       // navigating to home screen
-      // navigate('/home');
+      navigate('/');
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.error(error);
@@ -42,6 +46,14 @@ export default function Login() {
 
   return (
     <View style={styles.rootContainer}>
+      <View style={styles.innerContainer}>
+        <Text style={styles.textStyle}>Welcome to</Text>
+        <Image
+          style={styles.logoStyle}
+          source={require('../assets/images/shoppe_logo.png')}
+        />
+      </View>
+
       <GoogleSigninButton
         style={styles.googleButtonStyle}
         size={GoogleSigninButton.Size.Wide}
@@ -55,13 +67,26 @@ export default function Login() {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: 'white',
   },
+  innerContainer: {
+    height: height * 0.2,
+    // backgroundColor: 'orange',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoStyle: {
+    height: 80,
+    // width: 100,
+    // backgroundColor: 'orange',
+    objectFit: 'contain',
+  },
   textStyle: {
-    fontSize: 16,
-    color: 'black',
+    fontSize: 25,
+    color: '#1ecbe1',
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   imageStyle: {height: 60, width: 60, marginBottom: 10},

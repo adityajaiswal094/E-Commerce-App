@@ -72,17 +72,7 @@ export default function SingleProduct() {
   };
 
   const navigateToCart = () => {
-    navigate(
-      '/cart' /* {
-      state: {
-        quantity: quantity,
-        stock: stock,
-        setQuantity: setQuantity,
-        increaseQuantity: increaseQuantity,
-        decreaseQuantity: decreaseQuantity,
-      },
-    } */,
-    );
+    navigate('/cart');
   };
 
   const singleProductUrl = `${BASE_URL}singleproduct/${id}`;
@@ -310,7 +300,7 @@ const styles = StyleSheet.create({
   },
   outOfStock: {
     color: 'red',
-    fontSize: height < 762 ? height * 0.025 : height * 0.04,
+    fontSize: height < 762 ? height * 0.025 : height * 0.03,
     fontWeight: 'bold',
   },
   buttonStyle: {},

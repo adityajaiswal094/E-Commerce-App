@@ -14,6 +14,8 @@ import PageNotFound from './pages/PageNotFound';
 import Auth from './pages/Auth';
 import Login from './pages/Login';
 import {WEB_CLIENT_ID} from '@env';
+import SearchPage from './pages/SearchPage';
+import Layout from './pages/Layout';
 // import OnboardingScreen from './pages/OnboardingScreen';
 
 function App() {
@@ -35,14 +37,23 @@ function App() {
     <>
       <StatusBar /* barStyle={backgroundStyle} */ backgroundColor="#1ecbe1" />
       <Routes>
-        <Route path="/" element={<Auth />} />
-        <Route path="/login" element={<Login />} />
-        <Route exact path="/home" element={<HomePage />} />
-        <Route path="/singleproduct/:id" element={<SingleProduct />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/test" element={<Test />} />
-        <Route path="*" element={<PageNotFound />} />
+        <Route path="/" element={<Layout />}>
+          {/* public routes */}
+          <Route path="login" element={<Login />} />
+
+          {/* protected routes - we want to protect these routes */}
+          <Route element={<Auth />}>
+            <Route exact path="/" element={<HomePage />} />
+            <Route path="singleproduct/:id" element={<SingleProduct />} />
+            <Route path="cart" element={<Cart />} />
+            <Route path="search" element={<SearchPage />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="test" element={<Test />} />
+          </Route>
+
+          {/* catch all */}
+          <Route path="*" element={<PageNotFound />} />
+        </Route>
       </Routes>
 
       {/* <OnboardingScreen /> */}

@@ -16,7 +16,6 @@ const cartSlice = createSlice({
 
       // checking if an item with same id is already present or not in cart
       let existingProduct = state.cart.find(item => item.id === id + color);
-      console.log('existingProduct: ', existingProduct);
 
       if (existingProduct) {
         let updatedProduct = state.cart.map(item => {
